@@ -15,7 +15,7 @@ function preload(){
 function setup() {
   createCanvas(400, 400);
   background('red');
-  socket = io.connect('http://localhost:3000');
+  socket = io.connect('https://idm-collaborative-drawing.herokuapp.com/');
 
   // handle these broadcast calls
   socket.on('mouse', newCircleDrawing);
