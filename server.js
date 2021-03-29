@@ -8,7 +8,9 @@ let express = require('express');
 let app = express();
 
 //create our server
-let server = app.listen(3000);
+let port = process.env.PORT || 3000;
+let server = app.listen(port);
+
 
 // have my application use files in the public folder
 app.use(express.static('public'));
