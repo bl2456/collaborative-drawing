@@ -1,0 +1,20 @@
+{
+  "name": "class16",
+  "version": "1.0.0",
+  "description": "Making a drawing app to use with friends",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "drawing",
+    "p5",
+    "funtimes"
+  ],
+  "author": "Brian Lu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.0"
+  }
+}
