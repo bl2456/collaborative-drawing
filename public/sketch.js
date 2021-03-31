@@ -69,7 +69,7 @@ function setup() {
   cnv.mouseOut(() => mouseOverCanvas = false);
   background('black');
   //'https://idm-collaborative-drawing.herokuapp.com/'
-  socket = io.connect('http://localhost:3000');
+  socket = io.connect('https://idm-collaborative-drawing.herokuapp.com/');
 
   // handle these broadcast calls
   socket.on('draw', newDrawing);
