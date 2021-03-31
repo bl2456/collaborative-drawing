@@ -6,3 +6,44 @@ html, body {
 canvas {
   display: block;
 }
+
+button {
+  padding: 15px 25px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+}
+
+button:hover {
+  background-color: blanchedalmond;
+}
+
+h1 {
+  text-align: center;
+}
+
+.active {
+  color: #fff;
+  background-color: #463b3b81;
+  transform: translateY(5px);
+}
+
+.active:hover{
+  color: #000;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+}
+
+.container > div {
+  padding: 0 15px;
+}
+
+#colorPreview {
+  display: inline-block;
+  border: 1px solid black;
+}

@@ -26,13 +26,14 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
     console.log('new connection: ' + socket.id);
-    socket.on('mouse', mouseMsg);
-    socket.on('emoji', emojiMsg);
-    function mouseMsg(data){
+    socket.on('draw', drawMsg);
+    socket.on('clear', clearMsg);
+    function drawMsg(data){
         //console.log(data);
-        socket.broadcast.emit('mouse', data);
+        socket.broadcast.emit('draw', data);
     }
-    function emojiMsg(data){
-        socket.broadcast.emit('emoji', data);
+    function clearMsg(data){
+        //broadcast sends to every client except source client
+        socket.broadcast.emit('clear');
     }
 }
