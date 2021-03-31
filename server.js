@@ -28,12 +28,16 @@ function newConnection(socket){
     console.log('new connection: ' + socket.id);
     socket.on('draw', drawMsg);
     socket.on('clear', clearMsg);
+    socket.on('emoji', emojiMsg);
     function drawMsg(data){
         //console.log(data);
         socket.broadcast.emit('draw', data);
     }
-    function clearMsg(data){
+    function clearMsg(){
         //broadcast sends to every client except source client
         socket.broadcast.emit('clear');
+    }
+    function emojiMsg(data){
+        socket.broadcast.emit('emoji', data);
     }
 }

@@ -14,26 +14,33 @@
   </head>
 
   <body>
-    <h1>Drawing App</h1>
-    <div class='container'>
-      <div id='optionsBox'>
-        <button id='strokeStyle' class='drawingStyle active'>Stroke</button>
-        <button id='circleStyle' class='drawingStyle'>Circle</button>
-        <button id='eraser' class='drawingStyle'>Eraser</button>
-        <button id='clear' >Clear</button>
-
-        <h3>Stroke Size: <span id="strokeSizeValue"></span></h3>
-        <input type="range" min="1" max="50" value="1" class="slider" id="strokeSizeSlider" step="0.5">
-
-        <h3>Circle Size: <span id="circleSizeValue"></span></h3>
-        <input type="range" min="15" max="55" value="15" class="slider" id="circleSizeSlider" step="1">
-
-        <h3>Color Value: <span id="colorValue"></span></h3>
-        <input type="range" min="0" max="360" value="0" class="slider" id="colorSlider">
-        <h3>Color Preview: <div id='colorPreview'>COLOR</div></h3>
+    <div id='toolBar'>
+      <div class='container'>
+        <div id='styleBox'>
+          <button id='strokeStyle' class='drawingStyle active'>Stroke</button>
+          <button id='circleStyle' class='drawingStyle'>Circle</button>
+          <button id='eraser' class='drawingStyle'>Eraser</button>
+          <button id='clear' >Clear</button>
+        </div>
+        <div>
+          <h3>Stroke Size: <span id="strokeSizeValue"></span></h3>
+          <input type="range" min="1" max="50" value="1" class="slider" id="strokeSizeSlider" step="1">
+        </div>
+        <div>
+          <h3>Circle Size: <span id="circleSizeValue"></span></h3>
+          <input type="range" min="15" max="55" value="15" class="slider" id="circleSizeSlider" step="1">
+        </div>
+        <div>
+          <h3>Color:
+            <div id="colorValue">
+              <input type="color" id='colorPicker' value="#ffffff">
+            </div>
+          </h3>
+        </div>
+        
       </div>
-      <div id='canvasBox'></div>
     </div>
+    <div id='canvasBox'></div>
     <script src="sketch.js"></script>
   </body>
 </html>

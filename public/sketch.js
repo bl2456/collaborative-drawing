@@ -3,9 +3,17 @@
 
 let socket;
 let drawingMode = 'stroke';
-let circleSize;
-// let emoji1, emoji2;
+let buttonStroke;
+let buttonCircle;
+let buttonClear;
+let buttonEraser;
+let colorPicker;
+// let emojiPicker;
 
+//emojis
+
+// let emojiNames = ['fear', 'heartEyes', 'snore', 'sunglasses', 'swirl', 'tears', 'unamused', 'wink'];
+// let emojiImages = {};
 //-------------------------------------------------------------------------------------------------
 //Boolean for detecting if mouse is on canvas
 let mouseOverCanvas;
@@ -34,34 +42,34 @@ strokeSizeSlider.oninput = function(){strokeSizeValue.innerHTML = this.value};
 circleSizeValue.innerHTML = circleSizeSlider.value;
 circleSizeSlider.oninput = function(){circleSizeValue.innerHTML = this.value};
 
-//Color Slider Selectors and Values
-let colorSlider = document.querySelector('#colorSlider');
-let colorValue = document.querySelector('#colorValue');
-let colorPreview = document.querySelector('#colorPreview');
-let r,g,b;
-colorValue.innerHTML = colorSlider.value;
-[r,g,b] = HSBToRGB(colorSlider.value, 100, 100);
-colorPreview.style.color = `rgb(${r},${g},${b})`;
-colorSlider.oninput = function(){
-  colorValue.innerHTML = this.value;
-  [r,g,b] = HSBToRGB(this.value, 100, 100);
-  colorPreview.style.color = `rgb(${r},${g},${b})`;
-};
+//Emojis
+// emojiSection = document.querySelector("#emojiBox")
+// emojiNames.forEach(emoji => {
+//   let element = document.createElement('div');
+//   element.classList.add('emoji');
+//   element.style.backgroundImage = `url(./images/${emoji}.png)`;
+//   emojiSection.appendChild(element);
+
+// });
 
 
 //----------------------------------------------------------------------------------------------
 // function preload(){
-//   emoji1 = loadImage('images/swirl.png');
+//   for (let i = 0; i < emojiNames.length; i++) {
+//     let emoji = loadImage(`images/${emojiNames[i]}.png`);
+//     emojiImages[i] = emoji;
+//   }
+//   //emoji1 = loadImage('images/swirl.png');
 // }
 
 function setup() {
-  cnv = createCanvas(750, 750);
+  cnv = createCanvas(windowWidth, windowHeight);
   cnv.parent('canvasBox');
   cnv.mouseOver(() => mouseOverCanvas = true );
   cnv.mouseOut(() => mouseOverCanvas = false);
   background('black');
   //'https://idm-collaborative-drawing.herokuapp.com/'
-  socket = io.connect('https://idm-collaborative-drawing.herokuapp.com/');
+  socket = io.connect('http://localhost:3000');
 
   // handle these broadcast calls
   socket.on('draw', newDrawing);
@@ -91,19 +99,23 @@ function setup() {
   buttonEraser.mousePressed( () => {
     drawingMode = 'eraser';
   })
-  colorMode(HSB); //default rgb
+
+  colorPicker = select('#colorPicker');
+  // for (let i = 0; i < emojiNames.length; i++) {
+  //   emojiPicker.option(emojiNames[i], i);
+  // }
 }
 
 function newDrawing(data){
   if (data.mode == 'stroke'){
-    stroke(data.hue, 100, 100);
+    stroke(data.color);
     strokeWeight(data.strokeSize);
     line(data.x, data.y, data.px, data.py);
   }
   else if (data.mode == 'circle'){
     stroke('white');
     strokeWeight(1);
-    fill(data.hue, 100, 100);
+    fill(data.color);
     ellipse(data.x, data.y, data.size, data.size);
   }
   else if (data.mode == 'eraser'){
@@ -111,6 +123,10 @@ function newDrawing(data){
     strokeWeight(data.strokeSize);
     line(data.x, data.y, data.px, data.py);
   }
+  // else if (data.mode == 'emoji'){
+  //   imageMode(CENTER);
+  //   image(emojiImages[data.value], data.x, data.y, data.size, data.size);
+  // }
 }
 
 
@@ -127,8 +143,7 @@ function mouseDragged(){
     console.log('on Canvas');
     let data;
     if (drawingMode == "stroke"){
-      stroke(colorSlider.value, 100, 100);
-      console.log(colorSlider.value);
+      stroke(colorPicker.value());
       strokeWeight(strokeSizeSlider.value);
       line(mouseX, mouseY, pmouseX, pmouseY);
       data = {
@@ -138,20 +153,20 @@ function mouseDragged(){
         px: pmouseX,
         py: pmouseY,
         strokeSize: strokeSizeSlider.value,
-        hue: colorSlider.value
+        color: colorPicker.value()
       };
     }
     else if(drawingMode == "circle") {
       stroke('white');
       strokeWeight(1);
-      fill(colorSlider.value, 100, 100);
+      fill(colorPicker.value());
       ellipse(mouseX, mouseY, circleSizeSlider.value, circleSizeSlider.value);
       data = {
         mode: drawingMode,
         x: mouseX,
         y: mouseY,
         size: circleSizeSlider.value,
-        hue: colorSlider.value
+        color: colorPicker.value()
       };
     }
 
@@ -168,6 +183,9 @@ function mouseDragged(){
         strokeSize: strokeSizeSlider.value,
       };
     }
+    else{
+      return;
+    }
 
     // data is what sockets send to other clients
     socket.emit('draw',data);
@@ -177,12 +195,19 @@ function mouseDragged(){
   }
 }
 
-//helper function to translate hsb to rgb
-//https://www.30secondsofcode.org/js/s/hsb-to-rgb
-function HSBToRGB(h, s, b) {
-  s /= 100;
-  b /= 100;
-  const k = (n) => (n + h / 60) % 6;
-  const f = (n) => b * (1 - s * Math.max(0, Math.min(k(n), 4 - k(n), 1)));
-  return [255 * f(5), 255 * f(3), 255 * f(1)];
-};
+function mouseClicked() {
+  if (drawingMode == 'emoji'){
+    imageMode(CENTER);
+    image(emojiImages[emojiPicker.value()], mouseX, mouseY, circleSizeSlider.value, circelSizeSlider.value);
+  }
+  else {
+    return;
+  }
+  let data = {
+    x: mouseX,
+    y: mouseY,
+    size : circleSizeSlider.value,
+    value: emojiPicker.value()
+  }
+  socket.emit('emoji', data);
+}
