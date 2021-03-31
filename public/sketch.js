@@ -102,6 +102,7 @@ function newDrawing(data){
   }
   else if (data.mode == 'circle'){
     stroke('white');
+    strokeWeight(1);
     fill(data.hue, 100, 100);
     ellipse(data.x, data.y, data.size, data.size);
   }
@@ -142,6 +143,7 @@ function mouseDragged(){
     }
     else if(drawingMode == "circle") {
       stroke('white');
+      strokeWeight(1);
       fill(colorSlider.value, 100, 100);
       ellipse(mouseX, mouseY, circleSizeSlider.value, circleSizeSlider.value);
       data = {
